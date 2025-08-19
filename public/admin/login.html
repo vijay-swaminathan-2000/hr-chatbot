@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Chatbot - Admin Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h1 class="text-2xl font-bold text-center mb-6">HR Chatbot Admin</h1>
+        
+        <!-- Test Login Form -->
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-4">Test Login</h2>
+            <form id="test-login-form">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Select Test User:</label>
+                    <select id="test-user-select" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                        <option value="">Loading users...</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Login as Test User
+                </button>
+            </form>
+        </div>
+
+        <!-- Production SSO -->
+        <div class="border-t pt-6">
+            <h2 class="text-lg font-semibold mb-4">Production Login</h2>
+            <button id="sso-login" class="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                Login with JumpCloud SSO
+            </button>
+            <p class="text-xs text-gray-500 mt-2">Requires JumpCloud configuration</p>
+        </div>
+
+        <!-- Status Messages -->
+        <div id="message" class="mt-4 p-3 rounded hidden"></div>
+    </div>
+
+    <script>
+        class LoginPage {
+            constructor() {
+                this.baseUrl = '/api';
+                this.init();
+            }
+
+            async init() {
+                await this.loadTestUsers();
+                this.setupEventListeners();
+            }
+
+            async loadTestUsers() {
+                try {
+                    const response = await fetch(`${this.baseUrl}/test-auth/users`);
+                    const data = await response.json();
+                    
+                    const select = document.getElementById('test-user-select');
+                    select.innerHTML = data.users.map(user => 
+                        `<option value="${user.email}">${user.name} (${user.role})</option>`
+                    ).join('');
+                } catch (error) {
+                    this.showMessage('Failed to load test users', 'error');
+                }
+            }
+
+            setupEventListeners() {
+                document.getElementById('test-login-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('test-user-select').value;
+                    if (email) {
+                        await this.testLogin(email);
+                    }
+                });
+
+                document.getElementById('sso-login').addEventListener('click', () => {
+                    this.ssoLogin();
+                });
+            }
+
+            async testLogin(email) {
+                try {
+                    const response = await fetch(`${this.baseUrl}/test-auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        localStorage.setItem('hr_chatbot_token', data.token);
+                        this.showMessage('Login successful! Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = '/admin/';
+                        }, 1000);
+                    } else {
+                        this.showMessage(data.error, 'error');
+                    }
+                } catch (error) {
+                    this.showMessage('Login failed', 'error');
+                }
+            }
+
+            async ssoLogin() {
+                try {
+                    const response = await fetch(`${this.baseUrl}/auth/login`);
+                    const data = await response.json();
+                    window.location.href = data.authUrl;
+                } catch (error) {
+                    this.showMessage('SSO login not configured', 'error');
+                }
+            }
+
+            showMessage(text, type) {
+                const messageEl = document.getElementById('message');
+                messageEl.textContent = text;
+                messageEl.className = `mt-4 p-3 rounded ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+                messageEl.classList.remove('hidden');
+            }
+        }
+
+        new LoginPage();
+    </script>
+</body>
+</html>

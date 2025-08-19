@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Chatbot - Test Interface</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto p-6 max-w-4xl">
+        <h1 class="text-3xl font-bold text-center mb-8">HR Chatbot Test Interface</h1>
+        
+        <!-- Login Section -->
+        <div id="login-section" class="bg-white p-6 rounded-lg shadow mb-6">
+            <h2 class="text-xl font-bold mb-4">Login</h2>
+            <div class="flex gap-4">
+                <select id="user-select" class="flex-1 px-3 py-2 border rounded">
+                    <option value="">Select test user...</option>
+                </select>
+                <button id="login-btn" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">Login</button>
+            </div>
+            <div id="login-status" class="mt-2 text-sm"></div>
+        </div>
+
+        <!-- Chat Section -->
+        <div id="chat-section" class="bg-white rounded-lg shadow hidden">
+            <div class="p-6 border-b">
+                <h2 class="text-xl font-bold">Chat with HR Bot</h2>
+                <p class="text-gray-600">Ask questions about company policies</p>
+            </div>
+            
+            <div id="chat-messages" class="h-96 overflow-y-auto p-6 space-y-4">
+                <!-- Messages will appear here -->
+            </div>
+            
+            <div class="p-6 border-t">
+                <div class="flex gap-2">
+                    <input id="message-input" type="text" placeholder="Ask about policies..." 
+                           class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                    <button id="send-btn" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">Send</button>
+                </div>
+                
+                <!-- Quick Test Queries -->
+                <div class="mt-4">
+                    <p class="text-sm text-gray-600 mb-2">Quick test queries:</p>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="quick-query bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300" 
+                                data-query="What's the travel policy for India?">Travel Policy</button>
+                        <button class="quick-query bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300" 
+                                data-query="How many leave days can I take?">Leave Days</button>
+                        <button class="quick-query bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300" 
+                                data-query="Can I work from home?">Remote Work</button>
+                        <button class="quick-query bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-300" 
+                                data-query="What are the health benefits?">Health Benefits</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/test-chat.js"></script>
+</body>
+</html>

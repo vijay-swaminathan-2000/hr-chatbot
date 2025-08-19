@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Chatbot Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="app" class="min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-blue-600 text-white p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-xl font-bold">HR Chatbot Admin</h1>
+                <div>
+                    <span id="user-name" class="mr-4"></span>
+                    <button id="logout-btn" class="bg-blue-500 hover:bg-blue-700 px-3 py-1 rounded">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container mx-auto p-6">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-gray-500 text-sm">Total Queries</h3>
+                    <p id="total-queries" class="text-2xl font-bold text-blue-600">-</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-gray-500 text-sm">Active Users</h3>
+                    <p id="total-users" class="text-2xl font-bold text-green-600">-</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-gray-500 text-sm">Policies</h3>
+                    <p id="total-policies" class="text-2xl font-bold text-purple-600">-</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-gray-500 text-sm">Avg Rating</h3>
+                    <p id="avg-rating" class="text-2xl font-bold text-yellow-600">-</p>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="border-b">
+                    <nav class="flex space-x-8 px-6">
+                        <button class="tab-btn py-4 px-2 border-b-2 border-blue-500 text-blue-600 font-medium" data-tab="analytics">Analytics</button>
+                        <button class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700" data-tab="reports">Reports</button>
+                        <button class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700" data-tab="policies">Policies</button>
+                        <button class="tab-btn py-4 px-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700" data-tab="users">Users</button>
+                    </nav>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="p-6">
+                    <!-- Analytics Tab -->
+                    <div id="analytics-tab" class="tab-content">
+                        <h2 class="text-xl font-bold mb-4">Usage Analytics</h2>
+                        <canvas id="analytics-chart" width="400" height="200"></canvas>
+                    </div>
+
+                    <!-- Reports Tab -->
+                    <div id="reports-tab" class="tab-content hidden">
+                        <h2 class="text-xl font-bold mb-4">Reports</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="font-semibold mb-2">Top Answered Questions</h3>
+                                <div id="top-answered" class="space-y-2"></div>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold mb-2">Top Unanswered Questions</h3>
+                                <div id="top-unanswered" class="space-y-2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Policies Tab -->
+                    <div id="policies-tab" class="tab-content hidden">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold">Policy Management</h2>
+                            <button id="sync-policies" class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">Sync from SharePoint</button>
+                        </div>
+                        <div id="policies-list" class="space-y-2"></div>
+                    </div>
+
+                    <!-- Users Tab -->
+                    <div id="users-tab" class="tab-content hidden">
+                        <h2 class="text-xl font-bold mb-4">User Management</h2>
+                        <div id="users-list" class="space-y-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <p class="mt-2 text-center">Loading...</p>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
