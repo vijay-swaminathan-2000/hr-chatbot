@@ -9,7 +9,6 @@ if [ ! -f .env ]; then
     echo "⚠️  Please update .env with your actual configuration values"
 fi
 
-# Create logs directory
 mkdir -p logs
 
 # Install dependencies
